@@ -1,26 +1,46 @@
-import { createContext, useState } from "react";
+import {
+  createContext,
+  useState,
+} from "react";
 
-export const AuthContext = createContext();
+export const AuthContext =
+  createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user"))
-  );
+export const AuthProvider = ({
+  children,
+}) => {
+  const [user, setUser] =
+    useState(
+      JSON.parse(
+        localStorage.getItem("user")
+      )
+    );
 
-  const login = (userData, token) => {
+  const login = (
+    userData,
+    token
+  ) => {
     localStorage.setItem(
       "user",
       JSON.stringify(userData)
     );
 
-    localStorage.setItem("token", token);
+    localStorage.setItem(
+      "token",
+      token
+    );
 
     setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    localStorage.removeItem(
+      "user"
+    );
+
+    localStorage.removeItem(
+      "token"
+    );
 
     setUser(null);
   };
@@ -31,6 +51,8 @@ export const AuthProvider = ({ children }) => {
         user,
         login,
         logout,
+        isAuthenticated:
+          !!user,
       }}
     >
       {children}

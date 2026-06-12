@@ -1,7 +1,35 @@
-import { Link, useLocation } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+
+import {
+  useContext,
+} from "react";
+
+import {
+  AuthContext,
+} from "../context/AuthContext";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const location = useLocation();
+
+  const {
+    user,
+    logout,
+  } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+
+    alert(
+      "Logged Out Successfully"
+    );
+
+    navigate("/login");
+  };
 
   const navLink = (path) =>
     `transition duration-300 ${
@@ -22,7 +50,7 @@ export default function Navbar() {
           FoodBridge AI
         </Link>
 
-        {/* Navigation Links */}
+        {/* Menu */}
         <div className="flex items-center gap-6">
 
           <Link
@@ -34,47 +62,72 @@ export default function Navbar() {
 
           <Link
             to="/ngo-dashboard"
-            className={navLink("/ngo-dashboard")}
+            className={navLink(
+              "/ngo-dashboard"
+            )}
           >
             NGO
           </Link>
 
           <Link
             to="/restaurant-dashboard"
-            className={navLink("/restaurant-dashboard")}
+            className={navLink(
+              "/restaurant-dashboard"
+            )}
           >
             Restaurant
           </Link>
 
           <Link
             to="/admin-dashboard"
-            className={navLink("/admin-dashboard")}
+            className={navLink(
+              "/admin-dashboard"
+            )}
           >
             Admin
           </Link>
 
           <Link
             to="/history"
-            className={navLink("/history")}
+            className={navLink(
+              "/history"
+            )}
           >
             History
           </Link>
 
-          {/* Login Button */}
-          <Link
-            to="/login"
-            className="px-4 py-2 border border-green-400 rounded-lg text-green-400 hover:bg-green-400 hover:text-black transition duration-300"
-          >
-            Login
-          </Link>
+          {!user ? (
+            <>
+              <Link
+                to="/login"
+                className="px-4 py-2 border border-green-400 rounded-lg text-green-400 hover:bg-green-400 hover:text-black transition"
+              >
+                Login
+              </Link>
 
-          {/* Register Button */}
-          <Link
-            to="/register"
-            className="px-4 py-2 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition duration-300"
-          >
-            Register
-          </Link>
+              <Link
+                to="/register"
+                className="px-4 py-2 bg-green-500 text-black font-semibold rounded-lg hover:bg-green-400 transition"
+              >
+                Register
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="bg-white/10 px-4 py-2 rounded-lg">
+                <span className="text-green-400 font-semibold">
+                  {user?.role || "User"}
+                </span>
+              </div>
+
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-red-500 rounded-lg hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </>
+          )}
 
         </div>
       </div>
